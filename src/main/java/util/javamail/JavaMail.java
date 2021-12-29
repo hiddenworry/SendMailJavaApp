@@ -4,15 +4,20 @@
  */
 package util.javamail;
 
+import java.io.File;
 import java.util.Properties;
 import javax.mail.Authenticator;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
 
 /**
  *
@@ -27,16 +32,15 @@ public class JavaMail {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
-        
-        
+
         //
         final String account = "hidden2792001@gmail.com";
         final String password = "bao2792001";
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-             return new PasswordAuthentication(account, password);
-            }   
+                return new PasswordAuthentication(account, password);
+            }
         });
         Message message = preparedMessage(session, account, recepient);
         Transport.send(message);
@@ -45,18 +49,28 @@ public class JavaMail {
     }
 
     private static Message preparedMessage(Session session, String account, String recepient) {
-      
+
         try {
-             Message message = new MimeMessage(session);
+            Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(account));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
             message.setSubject("Hi there");
             message.setText("Hi there\n i'm youselt");
+            // send attatch file
+//            BodyPart messageBodyPart = new MimeBodyPart();
+//            messageBodyPart.setText("Mail Body");
+//            MimeBodyPart attachmentPart = new MimeBodyPart();
+//            attachmentPart.attachFile(new File("E:\\java_MVN\\Netbean-web-project\\DataCrawer\\CrawerData\\LinkImg0.ico"));
+//            Multipart multipart = new MimeMultipart();
+//            multipart.addBodyPart(messageBodyPart);
+//            multipart.addBodyPart(attachmentPart);
+//            message.setContent(multipart);
+
             return message;
         } catch (Exception e) {
             System.out.println("Failed!!!");
             e.printStackTrace();
         }
-       return null;
+        return null;
     }
 }
