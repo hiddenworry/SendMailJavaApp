@@ -23,9 +23,12 @@ import javax.mail.internet.MimeMultipart;
  *
  * @author ADMIN
  */
-public class JavaMail {
+public class JavaMail extends Mail{
 
-    public static void sendMail(String recepient) throws MessagingException {
+    public JavaMail(String username, String password) {
+        super(username, password);
+    }
+      public void sendMail(String recepient, String header, String content) throws MessagingException {
         System.out.println("Prepared sending email");
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
@@ -34,33 +37,33 @@ public class JavaMail {
         properties.put("mail.smtp.port", "587");
 
         //
-        final String account = "hidden2792001@gmail.com";
-        final String password = "bao2792001";
+        final String account = username;
+        final String password = this.password;
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(account, password);
             }
         });
-        Message message = preparedMessage(session, account, recepient);
+        Message message = preparedMessage(session, account, recepient, header, content);
         Transport.send(message);
         System.out.println("Send email successfully");
 
     }
 
-    private static Message preparedMessage(Session session, String account, String recepient) {
+    private  Message preparedMessage(Session session, String account, String recepient, String header, String content) {
 
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(account));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(recepient));
-            message.setSubject("Hi there");
-            message.setText("Hi there\n i'm youselt");
+            message.setSubject(header);
+            message.setText(content);
             // send attatch file
 //            BodyPart messageBodyPart = new MimeBodyPart();
 //            messageBodyPart.setText("Mail Body");
 //            MimeBodyPart attachmentPart = new MimeBodyPart();
-//            attachmentPart.attachFile(new File("E:\\java_MVN\\Netbean-web-project\\DataCrawer\\CrawerData\\LinkImg0.ico"));
+//            attachmentPart.attachFile(new File("//File direct"));
 //            Multipart multipart = new MimeMultipart();
 //            multipart.addBodyPart(messageBodyPart);
 //            multipart.addBodyPart(attachmentPart);
@@ -73,4 +76,7 @@ public class JavaMail {
         }
         return null;
     }
+   
+    
+  
 }

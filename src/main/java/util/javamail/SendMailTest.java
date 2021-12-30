@@ -12,6 +12,7 @@ import javax.mail.MessagingException;
  */
 public class SendMailTest {
     public static void main(String[] args) throws MessagingException {
-       JavaMail.sendMail("hiddenwory@gmail.com");
+      JavaMail j = new JavaMail("xxxx@gmail.com", "xxxxx");
+      j.sendMail("xxxx@mail.com", "<h1>hi</h1>", "something");
     }
 }
